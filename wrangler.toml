@@ -1,0 +1,14 @@
+name = "taiwan-stock-web"
+main = "src/api/stock.js"
+compatibility_date = "2024-01-01"
+
+[site]
+bucket = "./public"
+
+[[kv_namespaces]]
+binding = "STOCK_CACHE"
+id = "4d3ee8c7e65e4fa3a39b0cc9e429fe8f"
+
+[vars]
+API_VERSION = "v1"
+ENVIRONMENT = "production"
