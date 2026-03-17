@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 選股 | 台股分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Noto Sans TC', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="gradient-bg text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white/20 p-2 rounded-lg"><span class="text-2xl">📈</span></div>
+                    <div><h1 class="text-2xl font-bold">台股 AI 分析</h1></div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="px-4 py-2 hover:bg-white/20 rounded-lg">首頁</a>
+                    <a href="/stock.html" class="px-4 py-2 hover:bg-white/20 rounded-lg">個股分析</a>
+                    <a href="/screener.html" class="px-4 py-2 bg-white/20 rounded-lg">AI選股</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white mb-8">
+            <h2 class="text-2xl font-bold mb-2">🤖 AI 強勢股選股</h2>
+            <p class="text-white/80">基於均線多頭排列、MACD黃金交叉、量增價升等技術指標篩選</p>
+            <button onclick="runScreener()" class="mt-4 px-6 py-3 bg-white text-indigo-600 rounded-xl font-bold hover:shadow-lg transition">
+                重新掃描全市場
+            </button>
+        </div>
+
+        <div id="screener-results" class="bg-white rounded-2xl p-6 shadow-lg">
+            <div class="text-center py-12 text-gray-400">
+                <div class="text-6xl mb-4">🔍</div>
+                <p class="text-xl">點擊上方按鈕開始掃描</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function runScreener() {
+            const resultsDiv = document.getElementById('screener-results');
+            resultsDiv.innerHTML = '<div class="text-center py-12"><div class="text-4xl mb-4">⏳</div><p>AI 正在分析全市場股票...</p></div>';
+            
+            try {
+                const response = await fetch('/data/screener_2026-03-17.json');
+                const data = await response.json();
+                
+                let html = '<div class="mb-4 flex items-center justify-between">';
+                html += '<h3 class="text-lg font-bold text-gray-800">掃描完成，找到 ' + data.strong_count + ' 檔強勢股</h3>';
+                html += '<span class="text-sm text-gray-500">更新時間: ' + data.scan_date + '</span>';
+                html += '</div><div class="grid gap-4">';
+                
+                data.top_stocks.forEach((stock, index) => {
+                    html += '<div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 border border-indigo-100">';
+                    html += '<div class="flex items-center justify-between">';
+                    html += '<div class="flex items-center space-x-4">';
+                    html += '<div class="bg-indigo-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">' + (index + 1) + '</div>';
+                    html += '<div><div class="font-bold text-gray-800">' + stock.name + '</div>';
+                    html += '<div class="text-sm text-gray-500">' + stock.symbol + '</div></div>';
+                    html += '</div>';
+                    html += '<div class="text-right">';
+                    html += '<div class="text-2xl font-bold text-gray-800">$' + stock.price + '</div>';
+                    html += '<div class="text-sm text-green-600">評分: ' + stock.score + '</div>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '<div class="mt-2 text-sm text-gray-600">';
+                    html += '<span class="bg-green-100 text-green-700 px-2 py-1 rounded">' + stock.reasons + '</span>';
+                    html += '</div>';
+                    html += '</div>';
+                });
+                
+                html += '</div>';
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="text-center py-12 text-red-500">掃描失敗，請稍後再試</div>';
+            }
+        }
+    </script>
+</body>
+</html>
