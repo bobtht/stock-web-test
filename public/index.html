@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台股 AI 分析網 - Taiwan Stock AI Analysis</title>
+    <title>台股 AI 分析網</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Noto Sans TC', sans-serif; }
         .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .card-shadow { box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1); }
-        .hover-lift { transition: transform 0.3s, box-shadow 0.3s; }
-        .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 20px 50px -10px rgba(0,0,0,0.2); }
-        .animate-pulse-slow { animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -24,9 +20,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <div class="bg-white/20 p-2 rounded-lg">
-                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
-                        </svg>
+                        <span class="text-2xl">📈</span>
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold">台股 AI 分析</h1>
@@ -34,173 +28,65 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <button onclick="switchView('market')" id="btn-market" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition font-medium">
-                        📊 大盤
-                    </button>
-                    <button onclick="switchView('screener')" id="btn-screener" class="px-4 py-2 hover:bg-white/20 rounded-lg transition font-medium">
-                        🚀 AI選股
-                    </button>
-                    <button onclick="switchView('news')" id="btn-news" class="px-4 py-2 hover:bg-white/20 rounded-lg transition font-medium">
-                        📰 新聞
-                    </button>
+                    <a href="/" class="px-4 py-2 bg-white/20 rounded-lg">首頁</a>
+                    <a href="/stock.html" class="px-4 py-2 hover:bg-white/20 rounded-lg">個股分析</a>
+                    <a href="/screener.html" class="px-4 py-2 hover:bg-white/20 rounded-lg">AI選股</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- 主要內容區 -->
-    <main class="container mx-auto px-4 py-6">
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-8">
         <!-- 搜尋區 -->
-        <div class="bg-white rounded-2xl p-6 card-shadow mb-6">
+        <div class="bg-white rounded-2xl p-6 shadow-lg mb-8">
             <div class="flex flex-col md:flex-row gap-4">
                 <div class="flex-1 relative">
-                    <input type="text" id="stockInput" placeholder="輸入股票代號或名稱 (如: 2330 或 台積電)" 
+                    <input type="text" id="stockInput" placeholder="輸入股票代號 (如: 2330)" 
                            class="w-full px-6 py-4 bg-gray-100 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition text-lg">
-                    <svg class="w-6 h-6 text-gray-400 absolute right-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
                 </div>
-                <button onclick="searchStock()" class="px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold text-lg hover:shadow-lg transition hover:scale-105">
-                    🔍 查詢
+                <button onclick="searchStock()" 
+                        class="px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold text-lg hover:shadow-lg transition">
+                    查詢
                 </button>
             </div>
         </div>
 
-        <!-- 大盤儀表板 (預設顯示) -->
-        <div id="view-market" class="space-y-6">
-            <!-- 大盤指數卡片 -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white rounded-2xl p-6 card-shadow hover-lift">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-gray-600 font-medium">加權指數</h3>
-                        <span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-bold">+1.2%</span>
-                    </div>
-                    <div class="text-4xl font-bold text-gray-800">22,456.32</div>
-                    <div class="text-green-500 mt-2">▲ 265.8</div>
-                </div>
-                <div class="bg-white rounded-2xl p-6 card-shadow hover-lift">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-gray-600 font-medium">櫃買指數</h3>
-                        <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-bold">-0.5%</span>
-                    </div>
-                    <div class="text-4xl font-bold text-gray-800">285.64</div>
-                    <div class="text-red-500 mt-2">▼ 1.42</div>
-                </div>
-                <div class="bg-white rounded-2xl p-6 card-shadow hover-lift">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-gray-600 font-medium">成交金額</h3>
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-bold">活絡</span>
-                    </div>
-                    <div class="text-4xl font-bold text-gray-800">3,256億</div>
-                    <div class="text-gray-500 mt-2">較昨日 +12%</div>
-                </div>
+        <!-- 大盤概況 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <h3 class="text-gray-600 font-medium mb-2">加權指數</h3>
+                <div class="text-4xl font-bold text-gray-800" id="taiex">--</div>
+                <div class="text-gray-500 mt-2" id="taiex-change">--</div>
             </div>
-
-            <!-- 大盤走勢圖 -->
-            <div class="bg-white rounded-2xl p-6 card-shadow">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-bold text-gray-800">📈 大盤走勢</h2>
-                    <div class="flex space-x-2">
-                        <button class="px-3 py-1 bg-indigo-100 text-indigo-600 rounded-lg text-sm font-medium">日線</button>
-                        <button class="px-3 py-1 text-gray-500 hover:bg-gray-100 rounded-lg text-sm">週線</button>
-                        <button class="px-3 py-1 text-gray-500 hover:bg-gray-100 rounded-lg text-sm">月線</button>
-                    </div>
-                </div>
-                <div id="marketChart" class="h-96"></div>
+            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <h3 class="text-gray-600 font-medium mb-2">櫃買指數</h3>
+                <div class="text-4xl font-bold text-gray-800" id="otc">--</div>
+                <div class="text-gray-500 mt-2" id="otc-change">--</div>
             </div>
-
-            <!-- 熱門股票 -->
-            <div class="bg-white rounded-2xl p-6 card-shadow">
-                <h2 class="text-xl font-bold text-gray-800 mb-4">🔥 熱門股票</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-4 py-3 text-left text-gray-600 font-medium">股票</th>
-                                <th class="px-4 py-3 text-right text-gray-600 font-medium">價格</th>
-                                <th class="px-4 py-3 text-right text-gray-600 font-medium">漲跌</th>
-                                <th class="px-4 py-3 text-right text-gray-600 font-medium">成交量</th>
-                                <th class="px-4 py-3 text-center text-gray-600 font-medium">動作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="hotStocksTable" class="divide-y divide-gray-100">
-                            <!-- 動態填入 -->
-                        </tbody>
-                    </table>
-                </div>
+            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <h3 class="text-gray-600 font-medium mb-2">強勢股數</h3>
+                <div class="text-4xl font-bold text-green-600" id="strong-count">--</div>
+                <div class="text-gray-500 mt-2">今日篩選</div>
             </div>
         </div>
 
-        <!-- AI選股結果 (隱藏) -->
-        <div id="view-screener" class="hidden space-y-6">
-            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white">
-                <h2 class="text-2xl font-bold mb-2">🚀 AI 強勢股選股</h2>
-                <p class="text-white/80">基於均線多頭排列、MACD黃金交叉、量增價升等技術指標篩選</p>
-                <button onclick="runScreener()" class="mt-4 px-6 py-3 bg-white text-indigo-600 rounded-xl font-bold hover:shadow-lg transition">
-                    重新掃描全市場
-                </button>
-            </div>
-            <div id="screenerResults" class="bg-white rounded-2xl p-6 card-shadow">
-                <div class="text-center py-12 text-gray-400">
-                    <div class="text-6xl mb-4">🔍</div>
-                    <p class="text-xl">點擊上方按鈕開始掃描</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 財經新聞 (隱藏) -->
-        <div id="view-news" class="hidden space-y-6">
-            <h2 class="text-2xl font-bold text-gray-800">📰 重要財經新聞</h2>
-            <div id="newsContainer" class="space-y-4">
-                <!-- 動態填入 -->
-            </div>
-        </div>
-
-        <!-- 個股詳情 (隱藏) -->
-        <div id="view-stock" class="hidden space-y-6">
-            <div class="bg-white rounded-2xl p-6 card-shadow">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 id="stockName" class="text-3xl font-bold text-gray-800">--</h2>
-                        <p id="stockSymbol" class="text-gray-500">--</p>
-                    </div>
-                    <div class="text-right">
-                        <div id="stockPrice" class="text-4xl font-bold text-gray-800">--</div>
-                        <div id="stockChange" class="text-lg">--</div>
-                    </div>
-                </div>
-                <div id="stockChart" class="h-96"></div>
-            </div>
-
-            <!-- 技術指標 -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white rounded-xl p-4 card-shadow text-center">
-                    <div class="text-gray-500 text-sm mb-1">MA5</div>
-                    <div id="ma5Value" class="text-xl font-bold text-indigo-600">--</div>
-                </div>
-                <div class="bg-white rounded-xl p-4 card-shadow text-center">
-                    <div class="text-gray-500 text-sm mb-1">MA20</div>
-                    <div id="ma20Value" class="text-xl font-bold text-indigo-600">--</div>
-                </div>
-                <div class="bg-white rounded-xl p-4 card-shadow text-center">
-                    <div class="text-gray-500 text-sm mb-1">RSI</div>
-                    <div id="rsiValue" class="text-xl font-bold text-purple-600">--</div>
-                </div>
-                <div class="bg-white rounded-xl p-4 card-shadow text-center">
-                    <div class="text-gray-500 text-sm mb-1">MACD</div>
-                    <div id="macdValue" class="text-xl font-bold text-green-600">--</div>
-                </div>
+        <!-- 熱門股票 -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">🔥 熱門股票</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="hot-stocks">
+                <!-- 動態生成 -->
             </div>
         </div>
     </main>
 
-    <!-- 頁尾 -->
     <footer class="bg-gray-800 text-white py-8 mt-12">
         <div class="container mx-auto px-4 text-center">
-            <p class="text-gray-400">© 2024 台股 AI 分析網 | 資料僅供參考，投資需謹慎</p>
+            <p class="text-gray-400">© 2024 台股 AI 分析網</p>
+            <p class="text-gray-500 text-sm mt-2">資料僅供參考，投資需謹慎</p>
         </div>
     </footer>
 
-    <script src="app.js"></script>
+    <script src="/js/app.js"></script>
 </body>
 </html>

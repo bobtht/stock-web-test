@@ -1,0 +1,13 @@
+{
+  "name": "taiwan-stock-web",
+  "version": "1.0.0",
+  "description": "AI 驅動的台股技術分析平台",
+  "scripts": {
+    "dev": "wrangler pages dev public",
+    "deploy": "wrangler pages deploy public",
+    "build": "echo 'No build step required'"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
