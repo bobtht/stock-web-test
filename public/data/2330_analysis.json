@@ -1,0 +1,70 @@
+{
+  "symbol": "2330.TW",
+  "name": "台灣積體電路製造",
+  "analysis_date": "2026-03-17",
+  "price": 1845.0,
+  "change_5d": -0.3,
+  "technical": {
+    "verdict": "技術面中性",
+    "trend": "盤整",
+    "ma5": 1877.0,
+    "ma20": 1889.5,
+    "ma60": 1718.2,
+    "macd": "死叉",
+    "rsi": 46,
+    "k": 40,
+    "support": 1415.0,
+    "resistance": 2025.0,
+    "reasons": [
+      "MACD 死叉"
+    ]
+  },
+  "fundamental": {
+    "verdict": "基本面偏強",
+    "name": "Taiwan Semiconductor Manufacturing Company Limited",
+    "sector": "Technology",
+    "industry": "Semiconductors",
+    "pe": 28.23,
+    "pb": 8.95,
+    "revenue_growth": 20.5,
+    "earnings_growth": 35.0,
+    "comments": [
+      "自由現金流為正",
+      "負債壓力相對低",
+      "最近一季營收季增",
+      "最近一季營收年增"
+    ]
+  },
+  "chip": {
+    "verdict": "籌碼資料不足",
+    "note": "需 FinMind API 取得詳細籌碼資料"
+  },
+  "news": {
+    "verdict": "新聞面偏多",
+    "items": [
+      {
+        "title": "Elon Musk Says Tesla Terafab Project For AI Chips To Launch In A Week",
+        "sentiment": "偏多"
+      },
+      {
+        "title": "1 Clear AI Winner Investors Should Load Up On",
+        "sentiment": "偏多"
+      },
+      {
+        "title": "China's Next Chip Push Moves Toward 7 nm",
+        "sentiment": "中性"
+      }
+    ]
+  },
+  "summary": "整體中性偏多，適合觀察支撐後分批進場。",
+  "recommendation": {
+    "action": "觀望/逢低布局",
+    "entry_zone": [
+      1686,
+      1740
+    ],
+    "stop_loss": 1415,
+    "target": 2025,
+    "comment": "台積電目前處於技術面盤整、基本面強勁的狀態。股價位於MA5/20之下但MA60之上，呈現中期多頭、短期整理格局。MACD死叉顯示短期動能偏弱，建議等待回檔至1686-1740支撐區再分批布局。基本面堪稱完美：營收年增20.5%、獲利年增35%、自由現金流近1兆，財務結構穩健。AI晶片需求持續強勁，Tesla等大客戶訂單挹注成長動能。停損設於1415，目標價2025。適合長期投資人逢低布局，短線交易者建議觀望等待技術面轉強訊號。"
+  }
+}

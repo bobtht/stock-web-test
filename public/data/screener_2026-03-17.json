@@ -1,0 +1,56 @@
+{
+  "scan_date": "2026-03-17",
+  "total_scanned": 1080,
+  "strong_count": 51,
+  "top_stocks": [
+    {
+      "symbol": "1305.TW",
+      "name": "華夏",
+      "price": 13.7,
+      "score": 4.5,
+      "reasons": "均線多頭排列、MACD 黃金交叉、量增價升動能強"
+    },
+    {
+      "symbol": "1337.TW",
+      "name": "F-再生",
+      "price": 5.98,
+      "score": 4.5,
+      "reasons": "均線多頭排列、MACD 黃金交叉、量增價升動能強"
+    },
+    {
+      "symbol": "1723.TW",
+      "name": "中碳",
+      "price": 76.8,
+      "score": 4.5,
+      "reasons": "均線多頭排列、MACD 黃金交叉、量增價升動能強"
+    },
+    {
+      "symbol": "2481.TW",
+      "name": "強茂",
+      "price": 99.5,
+      "score": 4.5,
+      "reasons": "均線多頭排列、MACD 黃金交叉、量增價升動能強"
+    },
+    {
+      "symbol": "2603.TW",
+      "name": "長榮",
+      "price": 218.5,
+      "score": 4.5,
+      "reasons": "均線多頭排列、MACD 黃金交叉、量增價升動能強"
+    },
+    {
+      "symbol": "6451.TW",
+      "name": "訊芯-KY",
+      "price": 237.0,
+      "score": 4.5,
+      "reasons": "均線多頭排列、MACD 黃金交叉、量增價升動能強"
+    },
+    {
+      "symbol": "2330.TW",
+      "name": "台積電",
+      "price": 1845.0,
+      "score": 3.0,
+      "reasons": "技術面盤整，基本面強勁，建議觀望"
+    }
+  ]
+}
