@@ -1,26 +1,25 @@
 // Cloudflare Function - 轉發股票分析請求到 RPi Tunnel
 
 const RPI_TUNNEL_URL = 'https://prisoner-nevada-lived-cherry.trycloudflare.com';
-const API_KEY = 'dev-key-change-in-production'; // 應該使用環境變數
 
 export async function onRequestGet(context) {
-    const { request, params } = context;
+    const { request, params, env } = context;
     const symbol = params.symbol;
     
     console.log(`[CF Function] 分析股票: ${symbol}`);
     
     try {
-        // 轉發請求到 RPi Tunnel
+        // 轉發請求到 RPi Tunnel (不使用 API Key，因為 Tunnel 已經加密)
         const response = await fetch(`${RPI_TUNNEL_URL}/api/analyze/${symbol}`, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${API_KEY}`,
                 'Content-Type': 'application/json',
             },
         });
         
         if (!response.ok) {
-            throw new Error(`RPi API error: ${response.status}`);
+            const errorText = await response.text();
+            throw new Error(`RPi API error: ${response.status} - ${errorText}`);
         }
         
         const data = await response.json();
@@ -36,7 +35,7 @@ export async function onRequestGet(context) {
     } catch (error) {
         console.error('[CF Function Error]', error);
         
-        // 如果 RPi 不可用，回傳模擬資料
+        // 如果 RPi 不可用，回傳錯誤資訊
         return new Response(JSON.stringify({
             error: 'RPi API unavailable',
             message: error.message,
