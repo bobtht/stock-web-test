@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2330 台積電 - 深度分析 | 台股 AI 分析</title>
+    <title>個股深度分析 | 台股 AI 分析</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -22,23 +22,39 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="/" class="px-4 py-2 hover:bg-white/20 rounded-lg">首頁</a>
-                    <a href="/stock.html?symbol=2330.TW" class="px-4 py-2 bg-white/20 rounded-lg">個股分析</a>
+                    <a href="/stock.html" class="px-4 py-2 bg-white/20 rounded-lg">個股分析</a>
+                    <a href="/screener.html" class="px-4 py-2 hover:bg-white/20 rounded-lg">AI選股</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <main class="container mx-auto px-4 py-8">
+        <!-- 搜尋區 -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg mb-8">
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1 relative">
+                    <input type="text" id="stockInput" placeholder="輸入股票代號 (如: 2330)" 
+                           class="w-full px-6 py-4 bg-gray-100 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition text-lg"
+                           value="">
+                </div>
+                <button onclick="searchStock()" 
+                        class="px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold text-lg hover:shadow-lg transition">
+                    分析
+                </button>
+            </div>
+        </div>
+
         <!-- 股票標題 -->
         <div class="bg-white rounded-2xl p-6 shadow-lg mb-6">
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-800">2330.TW 台積電</h2>
-                    <p class="text-gray-500">Taiwan Semiconductor Manufacturing Company Limited</p>
+                    <h2 id="stock-name" class="text-3xl font-bold text-gray-800">請輸入股票代號</h2>
+                    <p id="stock-symbol" class="text-gray-500">-</p>
                 </div>
                 <div class="text-right">
-                    <div class="text-4xl font-bold text-gray-800">$1,845.00</div>
-                    <div class="text-lg text-green-600">▼ -0.3% (5日)</div>
+                    <div id="stock-price" class="text-4xl font-bold text-gray-800">-</div>
+                    <div id="stock-change" class="text-lg">-</div>
                 </div>
             </div>
         </div>
@@ -46,107 +62,55 @@
         <!-- 四面向分析卡片 -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <!-- 技術面 -->
-            <div class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-yellow-500">
+            <div id="technical-analysis" class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-gray-300">
                 <div class="flex items-center justify-between mb-2">
                     <h4 class="font-bold text-gray-800">技術面</h4>
-                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-sm">中性</span>
+                    <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-sm">等待分析</span>
                 </div>
-                <div class="space-y-2 text-sm text-gray-600">
-                    <div>趨勢: <span class="font-medium">盤整</span></div>
-                    <div>MACD: <span class="text-green-600">死叉</span></div>
-                    <div>RSI: <span class="font-medium">46</span></div>
-                    <div>KDJ K: <span class="font-medium">40</span></div>
-                    <div class="pt-2 border-t"></div>
-                    <div>支撐: <span class="text-green-600 font-medium">$1,415</span></div>
-                    <div>壓力: <span class="text-red-600 font-medium">$2,025</span></div>
-                </div>
+                <div class="text-sm text-gray-500">點擊上方分析按鈕開始</div>
             </div>
 
             <!-- 基本面 -->
-            <div class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-green-500">
+            <div id="fundamental-analysis" class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-gray-300">
                 <div class="flex items-center justify-between mb-2">
                     <h4 class="font-bold text-gray-800">基本面</h4>
-                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-sm">偏強</span>
+                    <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-sm">等待分析</span>
                 </div>
-                <div class="space-y-2 text-sm text-gray-600">
-                    <div>本益比: <span class="font-medium">28.2</span></div>
-                    <div>股價淨值比: <span class="font-medium">8.95</span></div>
-                    <div>營收成長: <span class="text-green-600 font-medium">+20.5%</span></div>
-                    <div>獲利成長: <span class="text-green-600 font-medium">+35.0%</span></div>
-                    <div class="pt-2 border-t"></div>
-                    <div class="text-xs text-gray-500">自由現金流近1兆</div>
-                    <div class="text-xs text-gray-500">負債壓力相對低</div>
-                </div>
+                <div class="text-sm text-gray-500">點擊上方分析按鈕開始</div>
             </div>
 
             <!-- 籌碼面 -->
-            <div class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-gray-400">
+            <div id="chip-analysis" class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-gray-300">
                 <div class="flex items-center justify-between mb-2">
                     <h4 class="font-bold text-gray-800">籌碼面</h4>
-                    <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-sm">資料不足</span>
+                    <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-sm">等待分析</span>
                 </div>
-                <div class="text-sm text-gray-500">
-                    <p>需要 FinMind API 取得詳細籌碼資料</p>
-                    <p class="mt-2 text-xs">包含：三大法人、融資券、借券賣出、八大行庫</p>
-                </div>
+                <div class="text-sm text-gray-500">點擊上方分析按鈕開始</div>
             </div>
 
             <!-- 新聞面 -->
-            <div class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-blue-500">
+            <div id="news-analysis" class="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-gray-300">
                 <div class="flex items-center justify-between mb-2">
                     <h4 class="font-bold text-gray-800">新聞面</h4>
-                    <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-sm">偏多</span>
+                    <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-sm">等待分析</span>
                 </div>
-                <div class="space-y-2 text-xs text-gray-600">
-                    <div class="flex items-start">
-                        <span class="text-green-500 mr-1">●</span>
-                        <span>Tesla AI Chips 專案即將啟動</span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="text-green-500 mr-1">●</span>
-                        <span>AI 需求持續強勁</span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="text-gray-400 mr-1">●</span>
-                        <span>中國晶片製程進展</span>
-                    </div>
-                </div>
+                <div class="text-sm text-gray-500">點擊上方分析按鈕開始</div>
             </div>
         </div>
 
-        <!-- 交易建議 -->
-        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white mb-8">
+        <!-- 綜合建議 -->
+        <div class="recommendation-section bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white mb-8">
             <h3 class="text-xl font-bold mb-4">💡 綜合分析與交易建議</h3>
             <div class="bg-white/10 rounded-xl p-4">
-                <p class="text-lg mb-4"><strong>整體評估：中性偏多，適合觀察支撐後分批進場。</strong></p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                    <div>
-                        <span class="text-white/80">建議動作：</span>
-                        <span class="font-bold">觀望/逢低布局</span>
-                    </div>
-                    <div>
-                        <span class="text-white/80">進場區間：</span>
-                        <span class="font-bold">$1,686 - $1,740</span>
-                    </div>
-                    <div>
-                        <span class="text-white/80">停損價位：</span>
-                        <span class="font-bold text-red-300">$1,415</span>
-                    </div>
-                </div>
+                <p class="text-lg">輸入股票代號後，AI 將進行四面向分析並提供交易建議</p>
             </div>
         </div>
 
         <!-- 詳細評語 -->
         <div class="bg-white rounded-2xl p-6 shadow-lg">
             <h3 class="text-lg font-bold text-gray-800 mb-4">📝 分析詳情</h3>
-            <div class="prose max-w-none text-gray-600">
-                <p class="mb-4"><strong>技術面分析：</strong>台積電目前處於技術面盤整格局。股價 $1,845 位於 MA5 ($1,877) 和 MA20 ($1,889) 之下，但高於 MA60 ($1,718)，呈現中期多頭、短期整理格局。MACD 死叉顯示短期動能偏弱，建議等待技術面轉強訊號。</p>
-                
-                <p class="mb-4"><strong>基本面分析：</strong>基本面堪稱完美，營收年增 20.5%、獲利年增 35%、自由現金流近 1 兆，財務結構穩健。本益比 28.2 仍在合理範圍，考量成長性，估值不算昂貴。</p>
-                
-                <p class="mb-4"><strong>產業面分析：</strong>AI 晶片需求持續強勁，Tesla 等大客戶訂單挹注成長動能。先進製程領先地位穩固，競爭優勢明顯。</p>
-                
-                <p class="mb-4"><strong>交易建議：</strong>適合長期投資人逢低布局，建議等待股價回檔至 $1,686-$1,740 區間分批進場。短線交易者建議觀望，等待 MACD 轉為金叉或股價站回均線之上再考慮介入。</p>
+            <div id="detail-analysis" class="prose max-w-none text-gray-600">
+                <p>等待分析結果...請輸入股票代號並點擊分析按�</p>
             </div>
         </div>
     </main>
@@ -156,5 +120,7 @@
             <p class="text-gray-400">© 2024 台股 AI 分析網 | 資料僅供參考，投資需謹慎</p>
         </div>
     </footer>
+
+    <script src="/js/api.js"></script>
 </body>
 </html>
